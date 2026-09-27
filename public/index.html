@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <!-- OWASP Security Meta -->
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta name="robots" content="index, follow">
+    <title>AnimeLovers - Hub Serial Anime Terlengkap & Aman</title>
+    
+    <!-- Google Fonts: Syne & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous">
+    
+    <!-- Custom Glassmorphism Styles -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="dark-theme">
+
+    <!-- Glowing Background Ambient Orbs (Glassmorphism Core) -->
+    <div class="ambient-orbs" aria-hidden="true">
+        <div class="orb orb-neon-purple"></div>
+        <div class="orb orb-neon-cyan"></div>
+        <div class="orb orb-neon-pink"></div>
+        <div class="orb orb-neon-blue"></div>
+        <div class="noise-overlay"></div>
+    </div>
+
+    <!-- Top Navigation Bar -->
+    <header class="glass-navbar">
+        <div class="nav-container">
+            <!-- Brand Logo -->
+            <a href="#" class="brand-logo" id="navLogo">
+                <div class="logo-badge">
+                    <i class="fa-solid fa-play"></i>
+                </div>
+                <div class="logo-text">
+                    <span class="logo-title">ANIME<span class="gradient-text">LOVERS</span></span>
+                    <span class="logo-subtitle"><i class="fa-solid fa-shield-halved"></i> OWASP SECURE</span>
+                </div>
+            </a>
+
+            <!-- Search Bar (Header Instant) -->
+            <div class="header-search-wrapper">
+                <div class="glass-search-box">
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input 
+                        type="text" 
+                        id="globalSearchInput" 
+                        placeholder="Cari serial anime, movie, genre... (cth: Solo Leveling, Naruto)"
+                        maxlength="60"
+                        autocomplete="off"
+                    >
+                    <button type="button" class="btn-clear-search" id="btnClearSearch" aria-label="Bersihkan pencarian" style="display: none;">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                    <div class="search-kbd-hint"><kbd>/</kbd></div>
+                </div>
+            </div>
+
+            <!-- Nav Actions & User Menu -->
+            <div class="nav-actions">
+                <nav class="nav-links">
+                    <button class="nav-tab active" data-tab="trending"><i class="fa-solid fa-fire"></i> Trending</button>
+                    <button class="nav-tab" data-tab="season"><i class="fa-solid fa-calendar-days"></i> Musim Ini</button>
+                    <button class="nav-tab" data-tab="all"><i class="fa-solid fa-compass"></i> Eksplorasi</button>
+                    <button class="nav-tab" data-tab="watchlist"><i class="fa-solid fa-bookmark"></i> Tersimpan</button>
+                </nav>
+
+                <!-- Security Audit Toggle Button -->
+                <button class="btn-glass-icon btn-security" id="btnSecurityModal" title="OWASP Security Telemetry">
+                    <i class="fa-solid fa-shield-cat"></i>
+                    <span class="security-pulse"></span>
+                </button>
+
+                <!-- Auth Buttons -->
+                <div class="auth-wrapper" id="authWrapper">
+                    <button class="btn-glass-primary" id="btnOpenLogin">
+                        <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                        <span>Masuk</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="main-content">
+
+        <!-- Hero Spotlight Banner -->
+        <section class="hero-section" id="heroSection">
+            <div class="hero-glass-card" id="heroGlassCard">
+                <div class="hero-background-backdrop" id="heroBackdrop"></div>
+                <div class="hero-overlay"></div>
+                <div class="hero-content">
+                    <div class="hero-tags">
+                        <span class="badge-spotlight"><i class="fa-solid fa-bolt"></i> SPOTLIGHT UTAMA</span>
+                        <span class="badge-status" id="heroStatus">Ongoing</span>
+                        <span class="badge-score" id="heroScore"><i class="fa-solid fa-star"></i> 9.12</span>
+                    </div>
+                    <h1 class="hero-title" id="heroTitle">Memuat Serial Pilihan...</h1>
+                    <p class="hero-synopsis" id="heroSynopsis">Jelajahi puluhan ribu serial anime lengkap dengan data terverifikasi dan aman dari ancaman siber.</p>
+                    
+                    <div class="hero-genres" id="heroGenres">
+                        <!-- Populated dynamically -->
+                    </div>
+
+                    <div class="hero-buttons">
+                        <button class="btn-neon-cta" id="btnHeroDetail">
+                            <i class="fa-solid fa-circle-info"></i> Lihat Detail Serial
+                        </button>
+                        <button class="btn-glass-secondary" id="btnHeroTrailer">
+                            <i class="fa-solid fa-circle-play"></i> Tonton Trailer
+                        </button>
+                        <button class="btn-glass-icon" id="btnHeroBookmark" title="Simpan ke Watchlist">
+                            <i class="fa-regular fa-bookmark"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Filter & Query Control Center -->
+        <section class="filter-section">
+            <div class="filter-glass-bar">
+                <div class="filter-controls">
+                    <!-- Genre Selector -->
+                    <div class="custom-select-wrapper">
+                        <label for="filterGenre"><i class="fa-solid fa-tags"></i> Genre</label>
+                        <select id="filterGenre" class="glass-select">
+                            <option value="">Semua Genre</option>
+                            <!-- Dynamically loaded genres -->
+                        </select>
+                    </div>
+
+                    <!-- Status Selector -->
+                    <div class="custom-select-wrapper">
+                        <label for="filterStatus"><i class="fa-solid fa-clock"></i> Status</label>
+                        <select id="filterStatus" class="glass-select">
+                            <option value="">Semua Status</option>
+                            <option value="airing">Sedang Tayang (Airing)</option>
+                            <option value="complete">Tamat (Completed)</option>
+                            <option value="upcoming">Akan Datang (Upcoming)</option>
+                        </select>
+                    </div>
+
+                    <!-- Type Selector -->
+                    <div class="custom-select-wrapper">
+                        <label for="filterType"><i class="fa-solid fa-tv"></i> Format</label>
+                        <select id="filterType" class="glass-select">
+                            <option value="">Semua Format</option>
+                            <option value="tv">Serial TV</option>
+                            <option value="movie">Movie / Bioskop</option>
+                            <option value="ova">OVA</option>
+                            <option value="special">Spesial</option>
+                            <option value="ona">ONA / Web</option>
+                        </select>
+                    </div>
+
+                    <!-- Sort Selector -->
+                    <div class="custom-select-wrapper">
+                        <label for="filterOrderBy"><i class="fa-solid fa-arrow-down-short-wide"></i> Urutkan</label>
+                        <select id="filterOrderBy" class="glass-select">
+                            <option value="popularity">Paling Populer</option>
+                            <option value="score">Skor Tertinggi</option>
+                            <option value="title">Judul (A-Z)</option>
+                            <option value="favorites">Paling Difavoritkan</option>
+                        </select>
+                    </div>
+
+                    <!-- Reset Filter Button -->
+                    <button type="button" class="btn-glass-reset" id="btnResetFilters" title="Reset Filter">
+                        <i class="fa-solid fa-rotate-left"></i>
+                        <span>Reset</span>
+                    </button>
+                </div>
+
+                <!-- Genre Quick Chips Pills -->
+                <div class="genre-chips-container" id="genreChipsContainer">
+                    <button class="genre-chip active" data-genre-id="">Semua</button>
+                    <button class="genre-chip" data-genre-id="1">Action</button>
+                    <button class="genre-chip" data-genre-id="2">Adventure</button>
+                    <button class="genre-chip" data-genre-id="4">Comedy</button>
+                    <button class="genre-chip" data-genre-id="10">Fantasy</button>
+                    <button class="genre-chip" data-genre-id="24">Sci-Fi</button>
+                    <button class="genre-chip" data-genre-id="22">Romance</button>
+                    <button class="genre-chip" data-genre-id="14">Horror</button>
+                    <button class="genre-chip" data-genre-id="7">Mystery</button>
+                    <button class="genre-chip" data-genre-id="36">Slice of Life</button>
+                    <button class="genre-chip" data-genre-id="30">Sports</button>
+                    <button class="genre-chip" data-genre-id="37">Supernatural</button>
+                    <button class="genre-chip" data-genre-id="62">Isekai</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Anime Catalog Section -->
+        <section class="catalog-section">
+            <div class="section-header">
+                <div class="section-title-wrapper">
+                    <h2 class="section-title" id="sectionTitle">
+                        <i class="fa-solid fa-fire gradient-icon"></i>
+                        <span id="sectionTitleText">Serial Anime Terpopuler</span>
+                    </h2>
+                    <span class="catalog-count-badge" id="catalogCount">Memuat...</span>
+                </div>
+
+                <div class="catalog-view-options">
+                    <span class="security-stamp"><i class="fa-solid fa-shield-check"></i> XSS Sanitized</span>
+                </div>
+            </div>
+
+            <!-- Anime Grid Container -->
+            <div class="anime-grid" id="animeGrid">
+                <!-- Skeleton Loading Placeholders -->
+                <div class="anime-card skeleton-card"></div>
+                <div class="anime-card skeleton-card"></div>
+                <div class="anime-card skeleton-card"></div>
+                <div class="anime-card skeleton-card"></div>
+                <div class="anime-card skeleton-card"></div>
+                <div class="anime-card skeleton-card"></div>
+                <div class="anime-card skeleton-card"></div>
+                <div class="anime-card skeleton-card"></div>
+            </div>
+
+            <!-- Pagination Bar -->
+            <div class="pagination-wrapper" id="paginationWrapper">
+                <button class="btn-glass-page" id="btnPrevPage" disabled>
+                    <i class="fa-solid fa-chevron-left"></i> Sebelumnya
+                </button>
+                <div class="page-indicator" id="pageIndicator">
+                    Halaman <span class="current-page-num" id="currentPageNum">1</span>
+                </div>
+                <button class="btn-glass-page" id="btnNextPage">
+                    Berikutnya <i class="fa-solid fa-chevron-right"></i>
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Glassmorphism Anime Detail Modal -->
+    <div class="glass-modal-backdrop" id="detailModalBackdrop" aria-hidden="true">
+        <div class="glass-modal detail-modal" id="detailModal">
+            <button class="btn-close-modal" id="btnCloseDetailModal" aria-label="Tutup Detail">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="modal-body" id="detailModalBody">
+                <!-- Populated dynamically via SecurityEngine -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Video Trailer Player Modal -->
+    <div class="glass-modal-backdrop" id="trailerModalBackdrop" aria-hidden="true">
+        <div class="glass-modal video-modal" id="trailerModal">
+            <button class="btn-close-modal" id="btnCloseTrailerModal" aria-label="Tutup Video">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="video-container" id="trailerContainer">
+                <!-- Sandboxed safe iframe injected here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Glassmorphism Login & Register Modal (OWASP Top 10 Hardened) -->
+    <div class="glass-modal-backdrop" id="authModalBackdrop" aria-hidden="true">
+        <div class="glass-modal auth-modal" id="authModal">
+            <button class="btn-close-modal" id="btnCloseAuthModal" aria-label="Tutup Modal">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <!-- Card Header -->
+            <div class="auth-header">
+                <div class="auth-brand-icon">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <h3 id="authModalTitle">Masuk ke AnimeLovers</h3>
+                <p id="authModalSubtitle">Akses watchlist terenkripsi & sinkronisasi serial favorit Anda.</p>
+            </div>
+
+            <!-- Tab Switcher (Login / Register) -->
+            <div class="auth-tabs">
+                <button class="auth-tab-btn active" id="tabBtnLogin">Masuk</button>
+                <button class="auth-tab-btn" id="tabBtnRegister">Daftar Akun</button>
+            </div>
+
+            <!-- Login Form -->
+            <form id="loginForm" class="auth-form" novalidate>
+                <div class="input-group">
+                    <label for="authEmail"><i class="fa-regular fa-envelope"></i> Alamat Email</label>
+                    <div class="input-box">
+                        <input 
+                            type="email" 
+                            id="authEmail" 
+                            placeholder="otaku@animelovers.dev" 
+                            required 
+                            maxlength="100"
+                            autocomplete="username"
+                        >
+                    </div>
+                    <span class="error-msg" id="authEmailError"></span>
+                </div>
+
+                <div class="input-group">
+                    <label for="authPassword"><i class="fa-solid fa-lock"></i> Kata Sandi</label>
+                    <div class="input-box">
+                        <input 
+                            type="password" 
+                            id="authPassword" 
+                            placeholder="••••••••••••" 
+                            required 
+                            maxlength="64"
+                            autocomplete="current-password"
+                        >
+                        <button type="button" class="btn-toggle-pw" id="toggleLoginPw" aria-label="Lihat kata sandi">
+                            <i class="fa-regular fa-eye"></i>
+                        </button>
+                    </div>
+                    <span class="error-msg" id="authPasswordError"></span>
+                </div>
+
+                <div class="form-aux">
+                    <label class="custom-checkbox">
+                        <input type="checkbox" id="rememberMe">
+                        <span class="checkmark"></span>
+                        <span class="checkbox-label">Ingat sesi saya</span>
+                    </label>
+                    <span class="demo-cred-hint" title="Akun Demo Bawaan: otaku@animelovers.dev / AnimeLover!2026">
+                        <i class="fa-solid fa-key"></i> Demo Akun Tersedia
+                    </span>
+                </div>
+
+                <button type="submit" class="btn-submit-auth" id="btnSubmitLogin">
+                    <span>Masuk Aman</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </form>
+
+            <!-- Register Form -->
+            <form id="registerForm" class="auth-form" style="display: none;" novalidate>
+                <div class="input-group">
+                    <label for="regUsername"><i class="fa-regular fa-user"></i> Nama Pengguna</label>
+                    <div class="input-box">
+                        <input 
+                            type="text" 
+                            id="regUsername" 
+                            placeholder="KageOtaku" 
+                            required 
+                            maxlength="30"
+                            autocomplete="username"
+                        >
+                    </div>
+                    <span class="error-msg" id="regUsernameError"></span>
+                </div>
+
+                <div class="input-group">
+                    <label for="regEmail"><i class="fa-regular fa-envelope"></i> Alamat Email</label>
+                    <div class="input-box">
+                        <input 
+                            type="email" 
+                            id="regEmail" 
+                            placeholder="nama@domain.com" 
+                            required 
+                            maxlength="100"
+                            autocomplete="email"
+                        >
+                    </div>
+                    <span class="error-msg" id="regEmailError"></span>
+                </div>
+
+                <div class="input-group">
+                    <label for="regPassword"><i class="fa-solid fa-shield-keyhole"></i> Kata Sandi (OWASP A07)</label>
+                    <div class="input-box">
+                        <input 
+                            type="password" 
+                            id="regPassword" 
+                            placeholder="Min 8 karakter (Besar, Kecil, Angka, Simbol)" 
+                            required 
+                            maxlength="64"
+                            autocomplete="new-password"
+                        >
+                        <button type="button" class="btn-toggle-pw" id="toggleRegPw" aria-label="Lihat kata sandi">
+                            <i class="fa-regular fa-eye"></i>
+                        </button>
+                    </div>
+                    <!-- Realtime Password Strength Meter -->
+                    <div class="pw-strength-wrapper">
+                        <div class="pw-strength-bar">
+                            <div class="pw-strength-fill" id="pwStrengthFill"></div>
+                        </div>
+                        <span class="pw-strength-label" id="pwStrengthLabel">Kekuatan Sandi</span>
+                    </div>
+                    <span class="error-msg" id="regPasswordError"></span>
+                </div>
+
+                <button type="submit" class="btn-submit-auth" id="btnSubmitRegister">
+                    <span>Daftar Akun Baru</span>
+                    <i class="fa-solid fa-user-plus"></i>
+                </button>
+            </form>
+
+            <div class="auth-security-footer">
+                <i class="fa-solid fa-lock"></i>
+                <span>Enkripsi Bcrypt (12 Rounds) & JWT Standar RFC 7519</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Security Audit Telemetry Modal (OWASP Top 10 Showcase) -->
+    <div class="glass-modal-backdrop" id="securityModalBackdrop" aria-hidden="true">
+        <div class="glass-modal security-modal" id="securityModal">
+            <button class="btn-close-modal" id="btnCloseSecurityModal" aria-label="Tutup Panel Keamanan">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            
+            <div class="security-modal-header">
+                <div class="security-badge-large">
+                    <i class="fa-solid fa-shield-virus"></i>
+                </div>
+                <h3>Laporan Keamanan Arsitektur Web (OWASP Top 10)</h3>
+                <p>Status verifikasi pertahanan aplikasi terhadap 10 ancaman siber kritikal menurut standar Open Web Application Security Project.</p>
+            </div>
+
+            <div class="security-checklist">
+                <div class="sec-item status-passed">
+                    <div class="sec-icon"><i class="fa-solid fa-circle-check"></i></div>
+                    <div class="sec-info">
+                        <strong>A01:2021 - Broken Access Control</strong>
+                        <p>Verifikasi token JWT HS256, kontrol hak akses bookmark per user ID, isolasi sesi.</p>
+                    </div>
+                </div>
+
+                <div class="sec-item status-passed">
+                    <div class="sec-icon"><i class="fa-solid fa-circle-check"></i></div>
+                    <div class="sec-info">
+                        <strong>A02:2021 - Cryptographic Failures</strong>
+                        <p>Zero Hardcoded Credentials. Hashing kata sandi menggunakan Bcrypt (12 salt rounds), secret dimuat via <code>.env</code>.</p>
+                    </div>
+                </div>
+
+                <div class="sec-item status-passed">
+                    <div class="sec-icon"><i class="fa-solid fa-circle-check"></i></div>
+                    <div class="sec-info">
+                        <strong>A03:2021 - Injection (XSS, SQLi, SSRF)</strong>
+                        <p>Semua input divalidasi regex &amp; disanitasi ketat. Rendering DOM menggunakan <code>SecurityEngine.safeSetText</code> &amp; escape HTML.</p>
+                    </div>
+                </div>
+
+                <div class="sec-item status-passed">
+                    <div class="sec-icon"><i class="fa-solid fa-circle-check"></i></div>
+                    <div class="sec-info">
+                        <strong>A04:2021 - Insecure Design &amp; DoS Protection</strong>
+                        <p>Rate limiting (15 req/15 min untuk auth, 300 req/15 min untuk API) + In-memory cache proxy.</p>
+                    </div>
+                </div>
+
+                <div class="sec-item status-passed">
+                    <div class="sec-icon"><i class="fa-solid fa-circle-check"></i></div>
+                    <div class="sec-info">
+                        <strong>A05:2021 - Security Misconfiguration</strong>
+                        <p>Helmet CSP (Content Security Policy) diaktifkan, <code>X-Powered-By</code> dinonaktifkan, <code>nosniff</code> &amp; HSTS aktif.</p>
+                    </div>
+                </div>
+
+                <div class="sec-item status-passed">
+                    <div class="sec-icon"><i class="fa-solid fa-circle-check"></i></div>
+                    <div class="sec-info">
+                        <strong>A07:2021 - Identification &amp; Authentication Failures</strong>
+                        <p>Pemeriksaan kekuatan password live (panjang, variasi karakter), pencegahan user enumeration &amp; mitigasi timing attack.</p>
+                    </div>
+                </div>
+
+                <div class="sec-item status-passed">
+                    <div class="sec-icon"><i class="fa-solid fa-circle-check"></i></div>
+                    <div class="sec-info">
+                        <strong>A10:2021 - Server-Side Request Forgery (SSRF)</strong>
+                        <p>Backend proxy menerapkan strict whitelist domain (hanya <code>api.jikan.moe</code>) dan sanitasi parameter upstream.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast Container -->
+    <div id="toastContainer" class="toast-container" role="alert" aria-live="polite"></div>
+
+    <!-- Footer -->
+    <footer class="glass-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="brand-badge small">
+                    <i class="fa-solid fa-play"></i>
+                </div>
+                <span>ANIME<strong>LOVERS</strong></span>
+            </div>
+            <p class="footer-copy">© 2026 AnimeLovers Hub. Terkoneksi dengan Database Anime Terlengkap. Dirancang dengan Standar Keamanan OWASP Top 10.</p>
+            <div class="footer-badges">
+                <span class="pill-badge"><i class="fa-solid fa-shield"></i> OWASP Compliant</span>
+                <span class="pill-badge"><i class="fa-solid fa-database"></i> Jikan v4 MyAnimeList REST API</span>
+                <span class="pill-badge"><i class="fa-solid fa-wand-magic-sparkles"></i> Pure Glassmorphism</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Core Security & Application Scripts -->
+    <script src="js/security.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
